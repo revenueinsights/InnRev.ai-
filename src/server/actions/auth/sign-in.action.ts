@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
 import { validateApiCall } from '@/utils/validate-api-call.util';
@@ -9,10 +10,7 @@ import { getExpirationDateFromToken } from '@/utils/get-expiration-date-from-tok
 
 import { authResponseSchema } from './auth.types';
 
-export async function signIn(
-  { user_email, password }: SignInFormType,
-  origin?: string
-) {
+export async function signIn(data: SignInFormType, origin?: string) {
   const setCookie = cookies().set;
 
   try {
@@ -20,10 +18,7 @@ export async function signIn(
       endpoint: '/auth/sign-in',
       zodSchema: authResponseSchema,
       method: 'POST',
-      body: {
-        user_email,
-        password,
-      },
+      body: data,
     });
 
     const expires = getExpirationDateFromToken(authResponse.access_token);
@@ -39,8 +34,7 @@ export async function signIn(
     });
 
     revalidatePath(origin || '/');
-
-    return Promise.resolve(authResponse);
+    redirect('/');
   } catch (error) {
     throw error;
   }
