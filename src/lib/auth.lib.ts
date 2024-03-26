@@ -10,21 +10,23 @@ export async function auth() {
   const getStorageCookies = cookies().get;
 
   const user = getStorageCookies('user')?.value;
+  const access_token = getStorageCookies('access_token')?.value;
 
-  const access_token = getStorageCookies('access_token')?.value.split(' ')[1];
   const userResponse = user
     ? userSchema.optional().safeParse(JSON.parse(user))
     : undefined;
 
+  const baseAuthObject = { access_token };
+
   if (userResponse?.success) {
     return {
-      access_token,
+      ...baseAuthObject,
       user: userResponse.data,
     };
   }
 
   return {
-    access_token,
+    ...baseAuthObject,
     user: undefined,
   };
 }
@@ -36,5 +38,5 @@ export async function logOut(origin?: string) {
   removeCookie('access_token');
 
   revalidatePath(origin || '/');
-  redirect('/');
+  redirect('/auth/sign-in');
 }

@@ -7,8 +7,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { TanstackProvider } from '@/providers/tanstack-provider';
 
 import './globals.css';
-import { Header } from './_components/header';
-import { Sidebar } from './_components/sidebar';
 
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
@@ -25,15 +23,7 @@ export default function RootLayout({ children }: WithChildren) {
       <html lang="en">
         <body className={plusJakartaSans.className}>
           <TanstackProvider>
-            <main className="min-w-full min-h-svh p-4 relative z-30">
-              <Header />
-              <section className="main-section">
-                <Sidebar />
-                <div className="pr-1.5 grid-screen-container hide-scrollbar">
-                  {children}
-                </div>
-              </section>
-            </main>
+            {children}
             <Toaster />
           </TanstackProvider>
         </body>

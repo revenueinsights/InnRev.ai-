@@ -4,13 +4,13 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 import { validateApiCall } from '@/utils/validate-api-call.util';
-import type{ LoginFormType } from '@/schemas/login-form.schema';
+import { type SignInFormType } from '@/app/auth/_schemas/sign-in-form.schema';
 import { getExpirationDateFromToken } from '@/utils/get-expiration-date-from-token.util';
 
-import { signUpResponseSchema } from './auth.types';
+import { authResponseSchema } from './auth.types';
 
-export async function login(
-  { email, password }: LoginFormType,
+export async function signIn(
+  { user_email, password }: SignInFormType,
   origin?: string
 ) {
   const setCookie = cookies().set;
@@ -18,24 +18,20 @@ export async function login(
   try {
     const authResponse = await validateApiCall({
       endpoint: '/auth/sign-in',
-      zodSchema: signUpResponseSchema,
+      zodSchema: authResponseSchema,
       method: 'POST',
       body: {
-        email,
+        user_email,
         password,
       },
     });
 
     const expires = getExpirationDateFromToken(authResponse.access_token);
 
-    setCookie(
-      'access_token',
-      `${authResponse.token_type} ${authResponse.access_token}`,
-      {
-        secure: true,
-        expires,
-      }
-    );
+    setCookie('access_token', authResponse.access_token, {
+      secure: true,
+      expires,
+    });
 
     setCookie('user', JSON.stringify(authResponse.user), {
       secure: true,

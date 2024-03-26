@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { auth } from '@/lib/auth.lib';
 import { toast } from '@/components/ui/use-toast';
 
 const api = axios.create({
@@ -7,7 +8,13 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  (req) => {
+  async (req) => {
+    const access_token = (await auth()).access_token;
+
+    if (access_token) {
+      req.headers.Authorization = `Bearer ${access_token}`;
+    }
+
     return Promise.resolve(req);
   },
   (err) => {
