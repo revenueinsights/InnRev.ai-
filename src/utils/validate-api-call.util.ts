@@ -1,4 +1,4 @@
-import { type ZodSchema, type ZodTypeDef, z } from 'zod';
+import { type ZodSchema, type ZodTypeDef, ZodError } from 'zod';
 import { type AxiosRequestConfig, type Method } from 'axios';
 
 import { api } from '@/api/api.service';
@@ -37,9 +37,6 @@ export async function validateApiCall<T>({
       url: endpoint,
       data: body,
       params,
-      headers: {
-        ...rest.headers,
-      },
       ...rest,
     });
 
@@ -47,7 +44,7 @@ export async function validateApiCall<T>({
 
     return Promise.resolve(responseParsedData);
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error instanceof ZodError) {
       toast({
         title: `API não respondeu da maneira esperada cheque o ENDPOINT: ${endpoint} com o método ${method}`,
         variant: 'destructive',
