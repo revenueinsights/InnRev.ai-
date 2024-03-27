@@ -103,7 +103,7 @@ export function SignUpForm() {
           )}
         />
         <Button disabled={isPending} type="submit" className="w-full">
-          {isPending ? <DefaultLoader /> : 'Sign In'}
+          {isPending ? <DefaultLoader /> : 'Sign Up'}
         </Button>
       </form>
       <Link href="/auth/sign-in" className="text-[#8A85FF] self-end">
