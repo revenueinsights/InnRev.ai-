@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useMutationWithToast } from '@/hooks/use-mutation-with-toast.hook';
 
 import {
   type SignUpFormType,
@@ -29,7 +30,7 @@ export function SignUpForm() {
     resolver: zodResolver(signUpFormSchema),
   });
 
-  const { isPending, mutate } = useMutation({
+  const { isPending, mutate } = useMutationWithToast({
     mutationFn: async (data: SignUpFormType) => signUp(data),
   });
 

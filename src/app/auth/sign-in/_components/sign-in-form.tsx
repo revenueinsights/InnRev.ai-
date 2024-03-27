@@ -3,7 +3,6 @@
 
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '@/components/ui/input';
@@ -11,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { DefaultLoader } from '@/components/shared/loader';
 import { signIn } from '@/server/actions/auth/sign-in.action';
 import { PasswordInput } from '@/components/ui/password-input';
+import { useMutationWithToast } from '@/hooks/use-mutation-with-toast.hook';
 import {
   Form,
   FormField,
@@ -29,7 +29,7 @@ export function SignInForm() {
     resolver: zodResolver(signInFormSchema),
   });
 
-  const { isPending, mutate } = useMutation({
+  const { isPending, mutate } = useMutationWithToast({
     mutationFn: async (data: SignInFormType) => signIn(data),
   });
 
