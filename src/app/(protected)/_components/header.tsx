@@ -9,13 +9,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { auth } from '@/lib/auth.lib';
 
 import { UserMenu } from './user-menu';
 
-export async function Header() {
-  const { user } = await auth();
-
+export function Header() {
   return (
     <header className="w-full flex justify-between items-center mb-[15px]">
       <Link
@@ -45,22 +42,20 @@ export async function Header() {
         <button className="bg-white text-[#292D32] min-w-[56px] h-[56px] grid place-items-center rounded-full text-[20px] transition-all hover:bg-[#f5f5f5]">
           <CiSearch />
         </button>
-        {user ? (
-          <Popover>
-            <PopoverTrigger>
-              <Image
-                src="/assets/user-new1.jpg"
-                width={56}
-                height={56}
-                alt="User"
-                className="max-w-none h-fit rounded-full"
-              />
-            </PopoverTrigger>
-            <PopoverContent align="end">
-              <UserMenu data={user} />
-            </PopoverContent>
-          </Popover>
-        ) : null}
+        <Popover>
+          <PopoverTrigger>
+            <Image
+              src="/assets/user-new1.jpg"
+              width={56}
+              height={56}
+              alt="User"
+              className="max-w-none h-fit rounded-full"
+            />
+          </PopoverTrigger>
+          <PopoverContent align="end">
+            <UserMenu />
+          </PopoverContent>
+        </Popover>
       </div>
     </header>
   );

@@ -6,9 +6,10 @@ import { useMutation } from '@tanstack/react-query';
 import { logOut } from '@/lib/auth.lib';
 import { Button } from '@/components/ui/button';
 import { DefaultLoader } from '@/components/shared/loader';
-import type { UserType } from '@/server/actions/auth/auth.types';
+import { useAuth } from '@/hooks/use-auth.hook';
 
-export function UserMenu({ data }: { data: UserType }) {
+export function UserMenu() {
+  const { authData, isLoading } = useAuth();
   const { mutate, isPending } = useMutation({
     mutationKey: ['logout'],
     mutationFn: async () => logOut(),
@@ -19,9 +20,9 @@ export function UserMenu({ data }: { data: UserType }) {
       onClick={() => mutate()}
       className="w-full inline-flex gap-2"
       variant="outline"
-      disabled={isPending}
+      disabled={isPending || isLoading}
     >
-      {isPending ? (
+      {isPending || isLoading ? (
         <DefaultLoader />
       ) : (
         <>
